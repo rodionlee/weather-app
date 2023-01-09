@@ -1,0 +1,32 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: content-box;
+}
+
+p {
+    text-align: center;
+}
+
+.mainContainer {
+    height: 100vh;
+    background-color: antiquewhite;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: center;
+}
+
+.daysContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.dayContainer {
+    width: 100px;
+    height: 100px;
+    background-color: aqua;
+    border: 1px solid grey;
+}
