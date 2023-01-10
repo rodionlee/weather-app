@@ -2,14 +2,13 @@ import './style.css';
 
 const apiController = {
     fetchData(variables) {
-        const fetchString = `https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,precipitation,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,weathercode,sunrise,sunset&current_weather=true&timezone=auto&start_date=${variables.startDate}&end_date=${variables.endDate}`;
+        const fetchString = `https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,precipitation,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,weathercode,sunrise,sunset&current_weather=true&temperature_unit=${variables.temperatureUnit}&timezone=auto&start_date=${variables.startDate}&end_date=${variables.endDate}`;
     
         const response = fetch(fetchString)
         .then(function(response) {
             return response.json();
         })
         .then(function(response) {
-            console.log(response);
             coordinator.processFetchedData(response);
         })
         .catch(function(error) { 
@@ -20,16 +19,20 @@ const apiController = {
 
 const coordinator = {
     response: "",
+    variables: {},
+
+    initialize() {
+        coordinator.createVariables();
+        apiController.fetchData(this.variables);
+        displayController.addEventListeners();
+    },
 
     createVariables() {
-        let startDate = new Date();
-        let endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-        startDate = startDate.toISOString().split("T")[0];
-        endDate = endDate.toISOString().split("T")[0];
-        return {
-            startDate, 
-            endDate
-        }
+        this.variables.startDate = new Date();
+        this.variables.endDate = new Date(this.variables.startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+        this.variables.startDate = this.variables.startDate.toISOString().split("T")[0];
+        this.variables.endDate = this.variables.endDate.toISOString().split("T")[0];
+        this.variables.temperatureUnit = "celsius";
     },
 
     processFetchedData(fetchedData) {
@@ -210,10 +213,27 @@ const coordinator = {
     processDayContainerClick(index) {
         const selectedDay = this.response.daily.time[index];
         coordinator.selectDay(index);
+
+        coordinator.processTemperatureUnitClick();
+
+    },
+
+    processTemperatureUnitClick() {
+
+        if (this.variables.temperatureUnit == "celsius") {
+            this.variables.temperatureUnit = "fahrenheit";
+        } else {
+            this.variables.temperatureUnit = "celsius";
+        } 
+
+
+        apiController.fetchData(this.variables);
+        displayController.changeTemperatureUnit();
     }
 }
 
 const displayController = {
+
     displayData(data) {
         const dayContainers = Array.from(document.querySelectorAll(".dayContainer"));
     
@@ -287,8 +307,15 @@ const displayController = {
     },
 
     addEventListeners() {
+
+        // Add event listeners to .dayContainer in .daysRow
         const dayContainers = document.querySelectorAll(".dayContainer");
         dayContainers.forEach(container => container.addEventListener("click", displayController.processDayContainerClick));
+
+
+        // Add event listener to .temperatureUnit (°C / °F)
+        const temperatureUnit = document.querySelector(".temperatureUnit");
+        temperatureUnit.addEventListener("click", () => coordinator.processTemperatureUnitClick());
     },
 
     processDayContainerClick(event) {
@@ -304,12 +331,21 @@ const displayController = {
         } 
 
         coordinator.processDayContainerClick(index);
+    },
+
+    changeTemperatureUnit() {
+        const temperatureUnit = document.querySelector(".temperatureUnit");
+        if (temperatureUnit.innerText == "°C") {
+            temperatureUnit.innerText = "°F";
+        } else {
+            temperatureUnit.innerText = "°C";
+        }
     }
 }
 
-const variables = coordinator.createVariables();
-apiController.fetchData(variables);
-displayController.addEventListeners();
+
+
+coordinator.initialize();
 
 
 
