@@ -2,7 +2,8 @@ import './style.css';
 
 const apiController = {
     fetchData(variables) {
-        const fetchString = `https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,precipitation,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,weathercode,sunrise,sunset&current_weather=true&temperature_unit=${variables.temperatureUnit}&timezone=auto&start_date=${variables.startDate}&end_date=${variables.endDate}`;
+
+        const fetchString = `https://api.open-meteo.com/v1/forecast?latitude=${variables.latitude}&longitude=${variables.longitude}&hourly=temperature_2m,precipitation,weathercode,windspeed_10m&daily=temperature_2m_max,temperature_2m_min,weathercode,sunrise,sunset&current_weather=true&temperature_unit=${variables.temperatureUnit}&timezone=auto&start_date=${variables.startDate}&end_date=${variables.endDate}`;
     
         const response = fetch(fetchString)
         .then(function(response) {
@@ -14,6 +15,25 @@ const apiController = {
         .catch(function(error) { 
             console.log(error);
         });
+    },
+
+    fetchCoordinates(city, country) {
+
+        const fetchURL = `https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`;
+        const fetchParametersObject = {
+            headers: {
+                "X-Api-Key": ""
+            }
+        };
+
+        fetch(fetchURL, fetchParametersObject)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(response) {
+                coordinator.processFetchedCoordinates(response[0].latitude, response[0].longitude);
+            })
+            .catch(() => console.log("ERROR"));
     }
 }
 
@@ -28,6 +48,8 @@ const coordinator = {
     },
 
     createVariables() {
+        this.variables.latitude = "52.52";
+        this.variables.longitude = "13.41";
         this.variables.startDate = new Date();
         this.variables.endDate = new Date(this.variables.startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
         this.variables.startDate = this.variables.startDate.toISOString().split("T")[0];
@@ -213,9 +235,6 @@ const coordinator = {
     processDayContainerClick(index) {
         const selectedDay = this.response.daily.time[index];
         coordinator.selectDay(index);
-
-        coordinator.processTemperatureUnitClick();
-
     },
 
     processTemperatureUnitClick() {
@@ -229,6 +248,16 @@ const coordinator = {
 
         apiController.fetchData(this.variables);
         displayController.changeTemperatureUnit();
+    },
+
+    processLocationChange(city, country) {
+        apiController.fetchCoordinates(city, country);
+    },
+
+    processFetchedCoordinates(latitude, longitude) {
+        this.variables.latitude = latitude;
+        this.variables.longitude = longitude;
+        apiController.fetchData(this.variables);
     }
 }
 
@@ -316,6 +345,18 @@ const displayController = {
         // Add event listener to .temperatureUnit (°C / °F)
         const temperatureUnit = document.querySelector(".temperatureUnit");
         temperatureUnit.addEventListener("click", () => coordinator.processTemperatureUnitClick());
+
+        // Add event listeners to city and country inputs
+        const city = document.querySelector(".city");
+        city.addEventListener("change", () => {
+            coordinator.processLocationChange(city.value, country.value);
+        });
+
+        const country = document.querySelector(".country");
+        country.addEventListener("change", () => {
+            coordinator.processLocationChange(city.value, country.value);
+        });
+
     },
 
     processDayContainerClick(event) {
@@ -342,8 +383,6 @@ const displayController = {
         }
     }
 }
-
-
 
 coordinator.initialize();
 

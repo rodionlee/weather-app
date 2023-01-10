@@ -99,6 +99,10 @@
 
 /* Typography */
 
+h1, h2, h3, p, input {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 p {
     text-align: center;
 }
@@ -128,9 +132,21 @@ body {
 
 .headerRow {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
 }
+
+.city, .country {
+    width: 150px;
+    border: none;
+    font-size: 28px;
+}
+
+.temperatureUnit {
+    margin-left: auto;
+}
+
+/* Days Rows */
 
 .daysRow {
     grid-row: 2 / 3;
