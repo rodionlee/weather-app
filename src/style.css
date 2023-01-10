@@ -1,24 +1,128 @@
+/* Global */
+
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    border: 1px solid grey;
 }
+
+:root {
+    
+    /* Light Theme */
+
+    --light-theme-primary: #81c784;
+    --light-theme-primary-light: #b2fab4;
+    --light-theme-primary-dark: #519657;
+    
+    --light-theme-background: #ffffff;
+    --light-theme-surface: #e8f5e9;
+
+    --light-theme-border-thick: 2px solid grey;
+    --light-theme-border-thin: 0.5px solid grey;
+    
+    --light-theme-secondary-text: grey;
+
+    --light-theme-box-shadow: 2px 2px 10px 2px grey;
+
+    /* Dark Theme */
+    
+    --dark-theme-primary: #4caf50;
+    --dark-theme-primary-light: #80e27e;
+    --dark-theme-primary-dark: #087f23;
+
+    --dark-theme-background: #373737;
+    --dark-theme-surface: #424242;
+
+    --dark-theme-border-thick: 2px solid rgb(191, 191, 191);
+    --dark-theme-border-thin: 0.5px solid rgb(191, 191, 191);
+
+    --dark-theme-secondary-text: rgb(156, 156, 156);
+
+    --dark-theme-box-shadow: 2px 2px 10px 2px rgb(66, 66, 66);
+
+    /* Theme toggle */
+
+    --toggle-width: 80px;
+    --toggle-height: calc(var(--toggle-width) / 2);
+    --toggle-padding: 5px;
+    --toggle-border-width: 2px;
+    --toggle-circle: calc(var(--toggle-width) / 2 - var(--toggle-padding) * 2 - var(--toggle-border-width) * 2);
+    --sun-color-for-theme-toggle: rgb(255, 190, 68);
+    --moon-color-for-theme-toggle: rgb(255, 255, 255);
+
+    /* Global */
+
+    --transition: 0.3s;
+    --rowHeight: 50px;
+    --global-padding: 32px;
+    --global-padding-small: 16px;
+    --border-radius: 16px;
+}
+
+.lightTheme {
+    --primary: var(--light-theme-primary);
+    --primary-light: var(--light-theme-primary-light);
+    --primary-dark: var(--light-theme-primary-dark);
+
+    --background: var(--light-theme-background);
+    --surface: var(--light-theme-surface);
+
+    --border-thick: var(--light-theme-border-thick);
+    --border-thin: var(--light-theme-border-thin);
+
+    --text: black;
+    --secondary-text: var(--light-theme-secondary-text);
+
+    --box-shadow: var(--light-theme-box-shadow);
+    
+    transition: var(--transition);
+}
+.darkTheme {
+    
+    --primary: var(--dark-theme-primary);
+    --primary-light: var(--dark-theme-primary-dark);
+    --primary-dark: var(--dark-theme-primary-dark);
+    
+    --background: var(--dark-theme-background);
+    --surface: var(--dark-theme-surface);
+
+    --border-thick: var(--dark-theme-border-thick);
+    --border-thin: var(--dark-theme-border-thin);
+    
+    --text: white;
+    --secondary-text: var(--dark-theme-secondary-text);
+    
+    --box-shadow: var(--dark-theme-box-shadow);
+
+    transition: var(--transition);
+}
+
+/* Typography */
 
 p {
     text-align: center;
 }
 
-.mainContainer {
+/* Rest */
+
+body {
+    padding: var(--global-padding);
     height: 100vh;
+}
 
-    padding: 32px;
+.mainContainer {
+    height: 100%;
 
-    background-color: antiquewhite;
+    padding: var(--global-padding);
+
+    background-color: var(--background);
+    border: var(--border-thick);
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 50px 150px 1fr;
+    grid-template-rows: 100px 150px 1fr;
     justify-content: center;
 }
 
@@ -36,16 +140,31 @@ p {
 }
 
 .dayContainer {
+    border: var(--border-thick);
+    padding: var(--global-padding-small);
+
+    text-align: center;
+
     height: 150px;
-    background-color: aqua;
     flex: 1;
 }
 
+.dayContainer:not(:last-of-type) {
+    border-right: none;
+}
+
 .selectedDayContainer {
-    background-color: blue;
+    background-color: var(--surface);
+    border-bottom: none;
 }
 
 .mainDayContainer {
+    padding: var(--global-padding-small);
+
+    background-color: var(--surface);
+    border: var(--border-thick);
+    border-top: none;
+
     grid-row: 3 / 4;
     display: flex;
 }
@@ -54,6 +173,12 @@ p {
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    border-right: var(--border-thin);
+}
+
+.hourContainer:last-of-type {
+    border-right: none;
 }
 
 .hourContainer > * {

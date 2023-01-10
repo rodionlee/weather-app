@@ -161,10 +161,16 @@ const coordinator = {
 
         // Create and populate the time array
         let timeArray = [];
-        let hours = 10;
+        let hours = 6;
+        const hourContainers = document.querySelectorAll(".hourContainer");
+        const amountOfHourContainers = hourContainers.length;
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < amountOfHourContainers; i++) {
+            if (hours < 10) {
+                hours = `0${hours}`;
+            }
             timeArray[i] = `${this.response.daily.time[dayIndex]}T${hours}:00`;
+            hours = Number(hours);
             hours += 2;
         }
 
@@ -275,7 +281,9 @@ const displayController = {
     },
 
     highlightSelectedDayInRow(dayIndex) {
-
+        const dayContainers = document.querySelectorAll(".dayContainer");
+        dayContainers.forEach(item => item.classList.remove("selectedDayContainer"));
+        dayContainers[dayIndex].classList.add("selectedDayContainer");
     },
 
     addEventListeners() {
