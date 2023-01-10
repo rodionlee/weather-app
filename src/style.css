@@ -17,23 +17,18 @@ p {
     background-color: antiquewhite;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 100px 150px 1fr;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 150px 1fr;
     justify-content: center;
 }
 
-.location {
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-}
-
-.temperatureUnits {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .daysRow {
-    grid-column: 1 / 3;
     grid-row: 2 / 3;
 
     display: flex;
@@ -47,6 +42,20 @@ p {
 }
 
 .selectedDayContainer {
-    grid-column: 1 / 3;
+    background-color: blue;
+}
+
+.mainDayContainer {
     grid-row: 3 / 4;
+    display: flex;
+}
+
+.hourContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hourContainer > * {
+    flex: 1;
 }
