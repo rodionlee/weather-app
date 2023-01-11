@@ -17,6 +17,8 @@
     --light-theme-background: #ffffff;
     --light-theme-surface: #e8f5e9;
 
+    --light-theme-focus: orange;
+
     --light-theme-border-thick: 2px solid grey;
     --light-theme-border-thin: 0.5px solid grey;
     
@@ -67,6 +69,8 @@
     --background: var(--light-theme-background);
     --surface: var(--light-theme-surface);
 
+    --focus: var(--light-theme-focus);
+
     --border-thick: var(--light-theme-border-thick);
     --border-thin: var(--light-theme-border-thin);
 
@@ -99,8 +103,10 @@
 
 /* Typography */
 
-h1, h2, h3, p, input {
-    font-family: Arial, Helvetica, sans-serif;
+h1, h2, h3, p, input, input::placeholder {
+    color: var(--text);
+    line-height: 1.5;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 p {
@@ -126,8 +132,11 @@ body {
 
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 100px 150px 1fr;
+    grid-template-rows: 100px 200px 1fr;
     justify-content: center;
+
+    background-image: url("../resources/clouds.jpg");
+    background-size: cover;
 }
 
 .headerRow {
@@ -137,13 +146,37 @@ body {
 }
 
 .city, .country {
-    width: 150px;
-    border: none;
+    width: 200px;
+    color: white;
     font-size: 28px;
+    font-weight: 800;
+    padding: var(--global-padding-small);
+    border: none;
+    outline: none;
+    background: none;
+}
+
+.city::placeholder, .country::placeholder {
+    color: white;
+}
+
+.city:hover, .country:hover, .temperatureUnit:hover, .dayContainer:hover {
+    background-color: var(--primary);
+    transition: var(--transition);
+}
+
+.city:focus, .country:focus {
+    background-color: var(--focus);
+    transition: var(--transition);
 }
 
 .temperatureUnit {
     margin-left: auto;
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+    padding: var(--global-padding-small); 
+    background: none;   
 }
 
 /* Days Rows */
@@ -153,16 +186,17 @@ body {
 
     display: flex;
     align-items: center;
+
+    background-color: var(--background);
 }
 
 .dayContainer {
     border: var(--border-thick);
     padding: var(--global-padding-small);
-
     text-align: center;
-
-    height: 150px;
+    height: 200px;
     flex: 1;
+    transition: var(--transition);
 }
 
 .dayContainer:not(:last-of-type) {
@@ -172,6 +206,7 @@ body {
 .selectedDayContainer {
     background-color: var(--surface);
     border-bottom: none;
+    flex: 2;
 }
 
 .mainDayContainer {

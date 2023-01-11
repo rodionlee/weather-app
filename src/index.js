@@ -1,3 +1,9 @@
+// https://open-meteo.com/en/docs#latitude=52.52&longitude=13.41&hourly=temperature_2m,precipitation,rain,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto
+
+// https://www.bbc.com/weather/6183235
+
+// https://api-ninjas.com/api/geocoding
+
 import './style.css';
 
 const apiController = {
@@ -22,7 +28,6 @@ const apiController = {
         const fetchURL = `https://api.api-ninjas.com/v1/geocoding?city=${city}&country=${country}`;
         const fetchParametersObject = {
             headers: {
-                "X-Api-Key": ""
             }
         };
 
